@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitwhisper"
+version = "0.1.0"
+description = "Scan git repositories for accidentally committed secrets"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.0",
+    "rich>=13.0",
+    "gitpython>=3.1",
+]
+
+[project.scripts]
+gitwhisper = "gitwhisper.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
