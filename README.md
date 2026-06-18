@@ -73,7 +73,18 @@ python -m pytest tests/ -v
 
 ## Why I Built This
 
-Secrets leaking into public repositories is one of the most common and costly security mistakes in software development. I built gitwhisper to understand the problem from the inside — how detection works, where the edge cases are, and what it takes to reduce false positives without missing real findings.
+## Why I Built This
+
+Secrets leaking into public repositories is one of the most common and costly security mistakes in software development.
+
+GitHub already has secret scanning built in — so why build this? Because GitHub's scanning is reactive. By the time it alerts you, the secret has already hit the network and may have been scraped by bots that watch GitHub in real time. gitwhisper is proactive. You run it before you push, or wire it into your CI pipeline so secrets never leave your machine.
+
+There's also a broader case for a tool like this:
+- Works on any git repo regardless of host (GitHub, GitLab, Bitbucket, self-hosted)
+- Can be installed as a pre-commit hook to catch secrets at the earliest point in the developer workflow
+- Enterprise teams that can't use cloud-based scanning for compliance reasons can run this locally
+
+I built gitwhisper to understand the detection problem from the inside — how pattern matching works, where the edge cases are, and what it takes to reduce false positives without missing real findings.
 
 ## License
 
