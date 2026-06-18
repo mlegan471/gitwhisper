@@ -66,6 +66,7 @@ def scan_directory(root: Path) -> Generator[Finding, None, None]:
         if path.is_file():
             yield from scan_file(path)
 
+
 def scan_directory_with_count(root: Path) -> Generator[tuple, None, None]:
     """Scan directory yielding (finding_or_None, files_checked) tuples."""
     count = 0
@@ -80,3 +81,48 @@ def scan_directory_with_count(root: Path) -> Generator[tuple, None, None]:
                 yield finding, count
             if not found_anything:
                 yield None, count
+
+
+def scan_git_history(root: Path) -> Generator[Finding, None, None]:
+    """Scan git commit history for secrets."""
+    try:
+        from git import Repo, InvalidGitRepositoryError
+    except ImportError:
+        return
+
+    try:
+        repo = Repo(root)
+    except InvalidGitRepositoryError:
+        return
+
+    seen = set()
+
+    for commit in repo.iter_commits():
+        for parent in commit.parents:
+            diffs = parent.diff(commit)
+            for diff in diffs:
+                try:
+                    if diff.b_blob is None:
+                        continue
+                    content = diff.b_blob.data_stream.read().decode(
+                        "utf-8", errors="ignore"
+                    )
+                    for line_number, line in enumerate(
+                        content.splitlines(), start=1
+                    ):
+                        for secret_pattern in PATTERNS:
+                            match = secret_pattern.pattern.search(line)
+                            if match:
+                                key = (secret_pattern.name, diff.b_path.strip(), line_number)
+                                if key in seen:
+                                    break
+                                seen.add(key)
+                                yield Finding(
+                                    pattern_name=secret_pattern.name,
+                                    file_path=f"[commit {commit.hexsha[:7]}] {diff.b_path}",
+                                    line_number=line_number,
+                                    line_preview=redact(line.strip(), match),
+                                )
+                                break
+                except Exception:
+                    continue
