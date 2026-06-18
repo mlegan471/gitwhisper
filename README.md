@@ -18,6 +18,7 @@ gitwhisper catches secrets before they cause damage.
 - ⚡ Live progress indicator
 - 🚦 Exit code 1 on findings — drop it straight into CI pipelines
 - 🔇 `--no-banner` flag for clean CI output
+- 📜 Scans git commit history with `--history` — because deleting a file doesn't remove it from git
 
 ## Installation
 
