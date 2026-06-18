@@ -77,8 +77,6 @@ python -m pytest tests/ -v
 
 ## Why I Built This
 
-## Why I Built This
-
 Secrets leaking into public repositories is one of the most common and costly security mistakes in software development.
 
 GitHub already has secret scanning built in — so why build this? Because GitHub's scanning is reactive. By the time it alerts you, the secret has already hit the network and may have been scraped by bots that watch GitHub in real time. gitwhisper is proactive. You run it before you push, or wire it into your CI pipeline so secrets never leave your machine.
