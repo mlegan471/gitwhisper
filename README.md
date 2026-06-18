@@ -4,6 +4,10 @@
 
 A CLI tool that scans git repositories for accidentally committed secrets — API keys, tokens, and credentials — before they become a problem.
 
+## Demo
+
+![gitwhisper demo](gitwhisper_demo.png)
+
 ## The Problem
 
 People get burned by exposed secrets constantly. Leaked AWS keys have resulted in thousands of dollars in unexpected bills. Exposed OpenAI keys get scraped within minutes. And the worst part? Deleting the file doesn't help — the secret lives on in your git history forever.
